@@ -1,0 +1,11 @@
+sudo: required
+services:
+    -docker
+
+
+before_install:
+    - docker build -t khemrajneupane/github-search -f Dockerfile.dev .
+
+
+script:
+    - docker run khemrajneupane/github-search npm run test -- --coverage

@@ -8,27 +8,15 @@ import "./App.css";
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { listItems: [], search: "", followers: [] };
+    this.state = { listItems: [], search: "" };
   }
-  submitFollowers = () => {
-    fetch(`https://api.github.com/users/${this.state.search}/followers`) // https://api.github.com/users/khemrajneupane
-      .then(response => response.json())
-      .then(responseData => {
-        //console.log("followers: ", responseData);
-        this.setState({
-          followers: [responseData]
-        });
-      });
-  };
 
   submitSearch = () => {
-    this.submitFollowers();
-    fetch(`https://api.github.com/users/${this.state.search}`) // https://api.github.com/users/khemrajneupane
+    fetch("https://api.github.com/search/repositories?q=" + this.state.search)
       .then(response => response.json())
       .then(responseData => {
-        //console.log("listitems: ", responseData);
         this.setState({
-          listItems: [this.state.followers.concat(responseData)]
+          listItems: responseData.items
         });
       });
   };
@@ -38,18 +26,13 @@ class App extends React.Component {
       search: event.target.value
     });
   };
-  componentDidMount() {
-    this.submitSearch();
-    this.submitFollowers();
-  }
   render() {
-    console.log("this.state.listItems", this.state.listItems);
-    const fullInfo = this.state.listItems.map(m => m.map(n => n));
-    console.log(fullInfo);
+    console.log(this.state.listItems);
+
     return (
       <div>
         <h1 style={{ textAlign: "center", color: "blue" }}>
-          Github Repository Search
+          Git repo search
         </h1>
         <input
           type="text"
@@ -59,13 +42,12 @@ class App extends React.Component {
         <Button className="btn btn-primary" onClick={this.submitSearch}>
           Search...
         </Button>
-        <div></div>
         <ReactTable
           data={this.state.listItems}
           columns={[
             {
-              Header: "Author",
-              accessor: "login"
+              Header: "Description",
+              accessor: "name"
             },
             {
               Header: "URls",
@@ -85,10 +67,6 @@ class App extends React.Component {
                   </a>
                 </div>
               )
-            },
-            {
-              Header: "Followers",
-              accessor: "[0].login "
             }
           ]}
         />
