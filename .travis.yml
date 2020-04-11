@@ -9,3 +9,17 @@ before_install:
 
 script:
     - docker run khemrajneupane/github-search npm run test -- --coverage
+
+deploy:
+    provider: elasticbeanstalk
+    region: "eu-north-1"
+    app: "github-search"
+    env: "GithubSearch-env"
+    bucket_name: "elasticbeanstalk-eu-north-1-424825972041"
+    bucket_path: "github-search"
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key:
+        secure: "$AWS_SECRET_KEY"
+    
