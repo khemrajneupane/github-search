@@ -32,7 +32,7 @@ class App extends React.Component {
     return (
       <div>
         <h1 style={{ textAlign: "center", color: "blue" }}>
-          Git repo search
+          Git repo search deployed to AWS Elastic Banstalk
         </h1>
         <input
           type="text"
